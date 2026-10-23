@@ -1,0 +1,4 @@
+Multi-tile orientation and sheet editing roundtrip verified
+Layered composite partial alpha, erasing, and untouched pixels verified
+Scene IDs, stacking, tile attributes, OTBM nodes, movement, and .aseprite metadata persistence verified
+PASS
