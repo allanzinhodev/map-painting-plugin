@@ -1,0 +1,9 @@
+Multi-tile orientation and sheet editing roundtrip verified
+Layered composite partial alpha, erasing, and untouched pixels verified
+Scene IDs, stacking, tile attributes, OTBM nodes, movement, and .aseprite metadata persistence verified
+Sheet edits propagate across documents, preserving other IDs; layer UUID keys are unique
+Aseprite events schedule automatic sync and simultaneous independent occurrence edits are merged
+Cropped occurrence edits propagate to sheet and second scene without changing anchors
+Regular #ID layer naming binds to the correct item
+Saved .aseprite layer UUIDs, source metadata, and edited pixels recover after resource reload
+PASS

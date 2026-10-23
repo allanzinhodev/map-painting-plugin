@@ -1,0 +1,1 @@
+PASS: native item browser painted and remained responsive
