@@ -1,10 +1,10 @@
-# Tibia — Itens e cenas
+# Open Tibia Painting
 
 Extensão para o Aseprite 1.3.18.3 da Steam e ponte nativa para o NexaMap local. O perfil inicial é o cliente 8.60 personalizado de `backlands-workflow/client/data/things/860`: sprites 32×32, RGBA, IDs estendidos, duração de animações e grupos de frames conforme `Tibia.otfi`.
 
 ## Usar no Aseprite
 
-Abra **File > Scripts > Tibia — Itens e cenas > Navegar itens…**. A janela mostra miniaturas paginadas, busca por ID e prévia animada. Cada item abre em um documento com sua spritesheet: colunas são frames; linhas são grupos e padrões; camadas correspondem às camadas do DAT. As slices identificam as linhas. Use a grade de 32 pixels.
+Abra **File > Scripts > Open Tibia Painting > Navegar itens…**. A janela compacta mostra 18 miniaturas por página, busca por ID e prévia animada. Cada item abre em um documento com sua spritesheet: colunas são frames; linhas são grupos e padrões; camadas correspondem às camadas do DAT. As slices identificam as linhas. Use a grade de 32 pixels.
 
 Ao editar uma spritesheet ou uma ocorrência vinculada, o plugin propaga os pixels às outras ocorrências daquele Client ID nos documentos abertos, respeitando a variante. Também é possível nomear uma camada RGB `#1234` para vinculá-la ao item. Não use esse prefixo em camadas que devem permanecer independentes. **Sincronizar** força a atualização; a caixa de propagação automática permite pausá-la.
 

@@ -1,6 +1,6 @@
 {
   "name": "tibia-workbench",
-  "displayName": "Tibia — Itens e cenas",
+  "displayName": "Open Tibia Painting",
   "description": "Editor DAT/SPR Tibia 8.60, spritesheets vinculadas por ID e cenas editáveis do NexaMap.",
   "version": "0.1.0",
   "author": { "name": "Allan" },

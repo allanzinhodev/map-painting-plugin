@@ -1,10 +1,15 @@
--- Tibia Workbench: native Lua DAT/SPR editing and NexaMap scene exchange.
+-- Open Tibia Painting: native Lua DAT/SPR editing and NexaMap scene exchange.
 local root=app.fs.filePath(debug.getinfo(1,'S').source:sub(2))
 local R=dofile(app.fs.joinPath(root,'lib','render.lua'))
 local Scene=dofile(app.fs.joinPath(root,'lib','scene.lua'))
 local T=R.codec
 local M={render=R,scene=Scene,codec=T,snapshots={},watchers={},dirty={},busy=false,enabled=true}
 local plugin,dialog,timer,siteListener
+local function statusText(text)
+  text=tostring(text)
+  local cutoff=utf8.offset(text,39)
+  return cutoff and (text:sub(1,cutoff-1)..'…') or text
+end
 local defaults={assetsDirectory='C:/Users/Allan/backlands-workflow/client/data/things/860',
   bridgeDirectory='C:/Users/Allan/Aseprite_tibia/runtime'}
 do
@@ -18,14 +23,14 @@ local function norm(path) return (path or ''):gsub('\\','/'):gsub('/+$',''):lowe
 local function sameProject(meta) return M.project and norm(meta.assetsDirectory)==norm(M.project.directory) end
 local function notify(message)
   M.status=tostring(message)
-  if dialog then dialog:modify{id='status',text=M.status}; dialog:repaint() end
+  if dialog then dialog:modify{id='status',text=statusText(M.status)}; dialog:repaint() end
 end
 local function safe(callback)
   return function(...)
     local ok,result=xpcall(callback,debug.traceback,...)
     if not ok then
       notify('Falha: '..tostring(result):match('^[^\n]+'))
-      if app.isUIAvailable then app.alert{title='Tibia Workbench',text=tostring(result)} else error(result) end
+      if app.isUIAvailable then app.alert{title='Open Tibia Painting',text=tostring(result)} else error(result) end
     end
     return result
   end
@@ -289,7 +294,7 @@ local function selectedInfo()
   local item=M.project.items[M.selected]
   if not item then return end
   local g=item.groups[1]
-  dialog:modify{id='selected',text=string.format('#%d · %dx%d · %d frames · %dx%dx%d padrões',item.id,g.width,g.height,g.frames,g.patternX,g.patternY,g.patternZ)}
+  dialog:modify{id='selected',text=string.format('#%d · %dx%d · %d frames · padrões %dx%dx%d',item.id,g.width,g.height,g.frames,g.patternX,g.patternY,g.patternZ)}
 end
 
 local function activeLink()
@@ -302,13 +307,13 @@ end
 function M.show()
   if dialog then dialog:close(); dialog=nil end
   ensureProject()
-  local cols,rows,cellW,cellH=8,4,54,58
+  local cols,rows,cellW,cellH=6,3,44,48
   local pageSize=cols*rows
-  dialog=Dialog{title='Tibia — Itens e cenas',onclose=function() dialog=nil end}
+  dialog=Dialog{title='Open Tibia Painting',onclose=function() dialog=nil end}
   local dlg=dialog
-  dlg:entry{id='search',label='ID / nome:',text='',onchange=function() filter(dlg.data.search) end}
-  dlg:button{text='Recursos…',onclick=safe(settings)}
-  dlg:newrow():canvas{id='items',width=cols*cellW,height=rows*cellH,
+  dlg:entry{id='search',placeholder='ID / nome',text='',onchange=function() filter(dlg.data.search) end}
+  dlg:samerow():button{text='Recursos…',onclick=safe(settings)}
+  dlg:newrow():canvas{id='items',width=cols*cellW,height=rows*cellH,hexpand=false,vexpand=false,
     onpaint=function(ev)
       local gc=ev.context
       gc.color=Color{r=32,g=34,b=39}; gc:fillRect(Rectangle(0,0,gc.width,gc.height))
@@ -320,7 +325,7 @@ function M.show()
           gc:fillRect(Rectangle(x+1,y+1,cellW-2,cellH-2))
           local image=M.thumbnails[id]
           if not image then image=R.render(M.project,id); M.thumbnails[id]=image end
-          local scale=math.min(1,38/image.width,38/image.height)
+          local scale=math.min(1,32/image.width,32/image.height)
           local w,h=math.floor(image.width*scale),math.floor(image.height*scale)
           gc:drawImage(image,Rectangle(0,0,image.width,image.height),Rectangle(x+(cellW-w)//2,y+3,w,h))
           gc.color=Color{r=235,g=235,b=230}; gc:fillText('#'..id,x+4,y+cellH-12)
@@ -338,34 +343,27 @@ function M.show()
     M.page=math.max(0,math.min(max,M.page+delta))
     dlg:modify{id='page',text=(M.page+1)..' / '..(max+1)..' · '..#M.filtered..' itens'}; dlg:repaint()
   end
-  dlg:newrow():button{text='‹',onclick=function() turn(-1) end}
-  dlg:label{id='page',text='1 / '..math.max(1,math.ceil(#M.filtered/pageSize))..' · '..#M.filtered..' itens'}
+  dlg:newrow():label{id='page',text='1 / '..math.max(1,math.ceil(#M.filtered/pageSize))..' · '..#M.filtered..' itens'}
+  dlg:samerow():button{text='‹',onclick=function() turn(-1) end}
   dlg:button{text='›',onclick=function() turn(1) end}
   dlg:newrow():label{id='selected',text='Selecione um item'}
-  dlg:newrow():canvas{id='preview',width=64,height=64,onpaint=function(ev)
+  dlg:newrow():canvas{id='preview',width=40,height=40,hexpand=false,vexpand=false,onpaint=function(ev)
     if not M.project or not M.selected then return end
     local g=M.project.items[M.selected].groups[1]
     local frame=(M.previewFrame or 0)%g.frames
     local image=R.render(M.project,M.selected,{frame=frame})
-    local scale=math.min(2,60/image.width,60/image.height)
+    local scale=math.min(1,36/image.width,36/image.height)
     ev.context:drawImage(image,Rectangle(0,0,image.width,image.height),Rectangle(2,2,math.floor(image.width*scale),math.floor(image.height*scale)))
   end}
-  dlg:button{text='Abrir spritesheet',onclick=safe(function() M.openItem(M.selected) end)}
-  dlg:button{text='Abrir ID da camada',onclick=safe(function()
+  dlg:samerow():button{text='Abrir item',onclick=safe(function() M.openItem(M.selected) end)}
+  dlg:button{text='ID da camada',onclick=safe(function()
     local id=assert(activeLink(),'Selecione uma camada #ID'); M.openItem(id)
   end)}
-  dlg:newrow():check{id='automatic',text='Propagar edições por #ID automaticamente',selected=M.enabled,onclick=function() M.enabled=dlg.data.automatic end}
-  dlg:button{text='Sincronizar',onclick=safe(function() M.sync(true) end)}
-  dlg:newrow():button{text='Colar cena NexaMap',onclick=safe(function() M.importScene() end)}
-  dlg:button{text='Copiar cena para NexaMap',onclick=safe(function() M.saveScene() end)}
-  dlg:newrow():button{text='Exportar DAT/SPR…',onclick=safe(function()
-    local out=Dialog{title='Exportar recursos editados'}
-    out:entry{id='directory',label='Pasta de saída:',text=app.fs.joinPath(M.project.directory,'aseprite-export')}
-    out:newrow():label{text='Exporte para uma pasta separada. Depois recarregue os recursos no NexaMap.'}
-    out:newrow():button{text='Exportar',onclick=safe(function() M.exportAssets(out.data.directory); out:close() end)}
-    out:button{text='Cancelar'}; out:show()
-  end)}
-  dlg:button{text='Exportar cena PNG…',onclick=safe(function()
+  dlg:newrow():check{id='automatic',text='Sincronizar #ID automaticamente',selected=M.enabled,onclick=function() M.enabled=dlg.data.automatic end}
+  dlg:samerow():button{text='Sincronizar',onclick=safe(function() M.sync(true) end)}
+  dlg:newrow():button{text='Colar cena',onclick=safe(function() M.importScene() end)}
+  dlg:button{text='Copiar cena',onclick=safe(function() M.saveScene() end)}
+  dlg:button{text='Cena PNG…',onclick=safe(function()
     assert(app.sprite,'Abra uma cena primeiro')
     local out=Dialog{title='Imagem da cena'}
     out:file{id='path',save=true,filename='cena.png',filetypes={'png'}}
@@ -374,15 +372,23 @@ function M.show()
     end)}
     out:button{text='Cancelar'}; out:show()
   end)}
-  dlg:newrow():button{text='Aplicar sprites ao cliente (com backup)',onclick=safe(M.applyAssets)}
-  dlg:newrow():label{id='status',text=M.status or 'Pronto'}
+  dlg:newrow():button{text='Exportar DAT/SPR…',onclick=safe(function()
+    local out=Dialog{title='Exportar recursos editados'}
+    out:entry{id='directory',label='Pasta de saída:',text=app.fs.joinPath(M.project.directory,'aseprite-export')}
+    out:newrow():label{text='Exporte para uma pasta separada. Depois recarregue os recursos no NexaMap.'}
+    out:newrow():button{text='Exportar',onclick=safe(function() M.exportAssets(out.data.directory); out:close() end)}
+    out:button{text='Cancelar'}; out:show()
+  end)}
+  dlg:button{text='Aplicar ao cliente',onclick=safe(M.applyAssets)}
+  dlg:newrow():label{id='status',text=statusText(M.status or 'Pronto')}
   selectedInfo(); dlg:show{wait=false}
+  return dlg
 end
 
 function init(extension)
   plugin=extension
   for k,v in pairs(defaults) do if plugin.preferences[k]==nil then plugin.preferences[k]=v end end
-  plugin:newMenuGroup{id='tibia_workbench',title='Tibia — Itens e cenas',group='file_scripts'}
+  plugin:newMenuGroup{id='tibia_workbench',title='Open Tibia Painting',group='file_scripts'}
   plugin:newCommand{id='TibiaWorkbench',title='Navegar itens…',group='tibia_workbench',onclick=safe(M.show)}
   plugin:newCommand{id='TibiaPasteScene',title='Colar cena do NexaMap',group='tibia_workbench',onclick=safe(function() ensureProject(); M.importScene() end)}
   plugin:newCommand{id='TibiaCopyScene',title='Copiar cena para NexaMap',group='tibia_workbench',onclick=safe(function() ensureProject(); M.saveScene() end)}

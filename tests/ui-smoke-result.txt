@@ -1,1 +1,1 @@
-PASS: native item browser painted and remained responsive
+PASS: Open Tibia Painting painted at 276x374 UI pixels; long status remained compact.
