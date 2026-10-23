@@ -1,0 +1,1 @@
+PASS: installed plugin loaded and registered TibiaSync; configured assets opened successfully.

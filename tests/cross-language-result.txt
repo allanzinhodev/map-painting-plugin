@@ -1,0 +1,3 @@
+PASS: native fixture -> Aseprite scene -> pixel edit -> linked item sheet -> 32px movement -> native packet
+7 item nodes retain exact Server IDs, Client IDs and opaque OTBM attributes; 1 sprite slots changed.
+Returned packet: C:\Users\Allan\Aseprite_tibia/test-output/aseprite-roundtrip-scene.json
