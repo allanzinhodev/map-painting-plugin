@@ -1,0 +1,77 @@
+{
+  "fixture": "C:\\Users\\Allan\\Aseprite_tibia\\test-output\\native-fixture-scene.json",
+  "success": true,
+  "tests": [
+    {
+      "clientId": 371,
+      "name": "custom_attributes",
+      "nativeBytes": 249,
+      "passed": true,
+      "serverId": 371
+    },
+    {
+      "clientId": 1781,
+      "name": "stack_subtype",
+      "nativeBytes": 7,
+      "passed": true,
+      "serverId": 1781
+    },
+    {
+      "clientId": 2524,
+      "name": "fluid_subtype",
+      "nativeBytes": 7,
+      "passed": true,
+      "serverId": 2524
+    },
+    {
+      "clientId": 1983,
+      "name": "nested_container",
+      "nativeBytes": 65,
+      "passed": true,
+      "serverId": 1983
+    },
+    {
+      "clientId": 371,
+      "name": "teleport_destination",
+      "nativeBytes": 11,
+      "passed": true,
+      "serverId": 371
+    },
+    {
+      "clientId": 371,
+      "name": "house_door_id",
+      "nativeBytes": 7,
+      "passed": true,
+      "serverId": 371
+    },
+    {
+      "clientId": 371,
+      "name": "depot_id",
+      "nativeBytes": 8,
+      "passed": true,
+      "serverId": 371
+    },
+    {
+      "name": "scene_positions_floors_flags_zones_selection",
+      "passed": true,
+      "tiles": 7
+    },
+    {
+      "name": "scene_paste_item_order_merge_flags_zones_ownership",
+      "passed": true
+    },
+    {
+      "name": "scene_paste_ground_replacement_and_empty_destination",
+      "passed": true
+    },
+    {
+      "name": "scene_paste_inputs_unchanged_no_neighbors_before_undo_action",
+      "passed": true
+    },
+    {
+      "cases": 3,
+      "name": "corrupt_payload_rejection",
+      "passed": true
+    }
+  ]
+}

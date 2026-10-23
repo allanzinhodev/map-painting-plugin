@@ -1,0 +1,26 @@
+﻿[
+    {
+        "path":  "data/menubar.xml",
+        "sha256":  "f80ff8890300a890e44c8e3aac8fcc51dd8bd9301da7744f6160c784db4b5e3f"
+    },
+    {
+        "path":  "source/application.cpp",
+        "sha256":  "0029c52d450f8914b89fc34f17fa446f056f1f3b18baa19e81e711c061a875de"
+    },
+    {
+        "path":  "source/copybuffer.cpp",
+        "sha256":  "913e96a67b227e34c0aabb2c307e47c6c8c37c1310663cc06fa81d488de5e46d"
+    },
+    {
+        "path":  "source/copybuffer.h",
+        "sha256":  "c663d96841d5f936da2a8b61c7255b1357fdae0389c32b7eddeba9086003c8d8"
+    },
+    {
+        "path":  "source/main_menubar.cpp",
+        "sha256":  "ff980ea737073f473ddacf4780af862fda162830d6cef30ad4772db1f65091ad"
+    },
+    {
+        "path":  "source/main_menubar.h",
+        "sha256":  "c1f1fcbe83629e82542c192692caacea71374c71f4bf9b836c8a3a2eed8b15d9"
+    }
+]
