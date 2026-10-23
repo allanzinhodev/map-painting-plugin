@@ -127,7 +127,7 @@ function M.parseOtfi(text)
     elseif key == "sprite-size" then flags.spriteSize = tonumber(value) end
   end
   assert(flags.spriteSize == 32, "A extensão suporta sprites de 32x32")
-  assert(files.controller == "Default", "Metadata-controller não suportado: " .. files.controller)
+  assert(files.controller:lower() == "default", "Metadata-controller não suportado: " .. files.controller)
   for _, name in ipairs({files.metadata, files.sprites}) do
     assert(not name:find("[/\\]") and not name:find("%.%."), "Nome de arquivo OTFI inválido")
   end
