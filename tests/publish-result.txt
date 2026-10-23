@@ -1,0 +1,1 @@
+PASS: publication parsed, alpha preserved, source backup exact, external changes rejected; live assets untouched.
