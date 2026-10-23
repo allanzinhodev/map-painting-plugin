@@ -1,0 +1,11 @@
+runtime/
+dist/
+backups/
+build/
+test-output/
+*.log
+tests/output-codec/
+tests/output-publish/
+tests/output-integration/
+tests/gui-profile/
+tests/gui-smoke.png

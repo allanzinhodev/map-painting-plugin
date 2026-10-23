@@ -1,0 +1,6 @@
+Loaded DAT: 4990 items, 254 outfits, 25 effects, 15 missiles; SPR: 10413
+Unchanged DAT/SPR byte-for-byte identical
+Every SPR entry decoded and RLE bounds verified; nonempty=10413
+Partial alpha roundtrip; shared ID isolated: #110 changed, #111 preserved; all other IDs and metadata unchanged
+Invalid writes rejected; reverting edit restores exact original bytes
+PASS
